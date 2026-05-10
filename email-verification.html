@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification Service</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function ()
+        {
+            var urlParams = new URLSearchParams(location.search);
+            if (urlParams.has('token')) {
+                verifyToken(urlParams.get('token'));
+            }
+        });
+
+        function verifyToken(tokenValue)
+        {
+            $.get('http://localhost:8080/mobile-app-ws/users/email-verification', {token: tokenValue})
+            .done(function (response) {
+                if (response["operationResult"] === "SUCCESS")
+                {
+                    $("#non-successful-result").attr("style", "display: none !important;");
+                    $("#successful-result").attr("style", "display: block !important");
+                } else {
+                    $("#successful-result").attr("style", "display: none !important;");
+                    $("#non-successful-result").attr("style", "display: block !important");
+                }
+            })
+            .fail(function(xhr, status, error) {
+                $("#successful-result").attr("style", "display: none !important;");
+                $("#non-successful-result").attr("style", "display: block !important");
+                console.log("Status: " + xhr.status);
+                console.log("Error: " + error);
+                console.log("Response: " + xhr.responseText);
+            });
+        }
+    </script>
+</head>
+<body>
+<div id="successful-result" style="display:none">Successful Verification</div>
+<div id="non-successful-result" style="display:none">Verification Link Expired</div>
+</body>
+</html>
