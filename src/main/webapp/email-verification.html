@@ -6,6 +6,8 @@
     <title>Email Verification Service</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
+        var BASE_URL = 'http://localhost:8081/mobile-app-ws';
+
         $(document).ready(function ()
         {
             var urlParams = new URLSearchParams(location.search);
@@ -16,7 +18,7 @@
 
         function verifyToken(tokenValue)
         {
-            $.get('http://3.133.12.245:8080/mobile-app-ws/users/email-verification', {token: tokenValue})
+            $.get(BASE_URL + '/users/email-verification', {token: tokenValue})
             .done(function (response) {
                 console.log("Raw response: " + JSON.stringify(response));
                 if (response["operationResult"] === "SUCCESS")
